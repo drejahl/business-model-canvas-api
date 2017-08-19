@@ -1,0 +1,24 @@
+{
+  "name": "business-model-canvas-api",
+  "version": "0.0.1",
+  "private": true,
+  "description": "Business Model Canvas API",
+  "keywords": [],
+  "author": "Dirk Rejahl",
+  "license": "MIT",
+  "main": "app.js",
+  "dependencies": {
+    "express": "^4.12.3",
+    "swagger-tools": "^0.10.1",
+    "winston": "^2.3.1",
+    "yamljs": "^0.3.0"
+  },
+  "devDependencies": {
+    "should": "^7.1.0",
+    "supertest": "^1.0.0"
+  },
+  "scripts": {
+    "start": "node app.js",
+    "test": "swagger project test"
+  }
+}
