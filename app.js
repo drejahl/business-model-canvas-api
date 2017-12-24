@@ -27,9 +27,9 @@ const authenticate = jwt({
 swaggerTools.initializeMiddleware(swaggerConfig, function(middleware) {
 
   app.use( cors() );
-  app.use( authenticate );
+//  app.use( authenticate );
 
-  app.use(middleware.swaggerMetadata()); 
+  app.use(middleware.swaggerMetadata());
 
   var routerConfig = {
     controllers: "./api/controllers",
@@ -37,7 +37,7 @@ swaggerTools.initializeMiddleware(swaggerConfig, function(middleware) {
   };
 
   app.use(middleware.swaggerRouter(routerConfig));
-  
+
   app.listen(10510, function() {
     console.log("Started server on port 10510");
   });

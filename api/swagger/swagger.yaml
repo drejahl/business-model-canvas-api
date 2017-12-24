@@ -4,15 +4,15 @@ info:
   title: Business Model Canvas API
 host: localhost:10510
 basePath: /v1
-# 
+#
 schemes:
   - http
   - https
-securityDefinitions:
-  Bearer:
-    type: apiKey
-    name: Authorization
-    in: header
+#securityDefinitions:
+#  Bearer:
+#    type: apiKey
+#    name: Authorization
+#    in: header
 consumes:
   - application/json
 produces:
@@ -20,9 +20,27 @@ produces:
 paths:
   /businessModelCanvas:
     x-swagger-router-controller: businessModelCanvas
+    post:
+      tags:
+        - BusinessModelCanvas
+      operationId: canvasCreate
+      summary: canvasCreate
+      description: ''
+      deprecated: false
+      parameters:
+        - name: canvas
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/BusinessModelCanvas'
+      responses:
+        '201':
+          description: BusinessModelCanvas
+          schema:
+            $ref: '#/definitions/BusinessModelCanvas'
     get:
-      security:
-        - Bearer: [] 
+#      security:
+#        - Bearer: []
       description: Returns an array of canvases
       operationId: canvasFind
       responses:
@@ -49,6 +67,14 @@ definitions:
       id:
         type: string
       name:
+        type: string
+      customerSegments:
+        type: array
+        items:
+          $ref: "#/definitions/CustomerSegment"
+  CustomerSegment:
+    properties:
+      id:
         type: string
   ErrorResponse:
     required:
