@@ -43,6 +43,17 @@ paths:
 #        - Bearer: []
       description: Returns an array of canvases
       operationId: canvasFind
+      parameters:
+        - name: fields
+          in: query
+          required: false
+          description: ''
+          type: string
+        - name: page
+          in: query
+          required: false
+          description: ''
+          type: integer
       responses:
         "200":
           description: Success
