@@ -65,10 +65,6 @@ paths:
           description: "Access Denied"
           schema:
             $ref: "#/definitions/ErrorResponse"
-        default:
-          description: Error
-          schema:
-            $ref: "#/definitions/ErrorResponse"
   /swagger:
     x-swagger-pipe: swagger_raw
 

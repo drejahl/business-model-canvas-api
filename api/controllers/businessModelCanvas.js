@@ -13,11 +13,7 @@ var MongoClient = require('mongodb').MongoClient;
 var assert = require('assert');
 
 // Mongo URL
-
-var argv = require('minimist')(process.argv);
-var dbhost = argv.dbhost ? argv.dbhost : config.db_host;
-const mongourl = config.db_prot+"://"+dbhost+":"
-        +config.db_port+"/"+config.db_name
+const mongourl = process.env.MONGO_STRING;
 
 module.exports = {
   canvasFind,
