@@ -38,7 +38,7 @@ swaggerTools.initializeMiddleware(swaggerConfig, function(middleware) {
 
   app.use(middleware.swaggerRouter(routerConfig));
 
-  app.listen(10510, function() {
-    console.log("Started server on port 10510");
+  app.listen(process.env.PORT, function() {
+    console.log("Started server on port ", process.env.PORT);
   });
 });
