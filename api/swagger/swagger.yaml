@@ -2,7 +2,7 @@ swagger: "2.0"
 info:
   version: "0.0.1"
   title: Business Model Canvas API
-host: localhost:4000
+host: localhost:80
 basePath: /v1
 #
 schemes:
