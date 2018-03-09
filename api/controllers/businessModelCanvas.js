@@ -17,8 +17,13 @@ const mongourl = process.env.MONGO_STRING;
 
 module.exports = {
   canvasFind,
-  canvasCreate
+  canvasCreate,
+  check
 };
+
+function check(req, res) {
+  res.json( "Alive" );
+}
 
 function canvasFind(req, res) {
 
