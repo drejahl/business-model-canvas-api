@@ -1,5 +1,6 @@
 pipeline:
-  build:
-    image: node:latest
-    commands:
-      - npm install
+  gcr:
+    image: plugins/gcr
+    repo: citric-lead-197512/bmc-api
+    tags: latest
+    secrets: [google_credentials]
