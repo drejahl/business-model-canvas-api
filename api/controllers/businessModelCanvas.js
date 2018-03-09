@@ -22,7 +22,7 @@ module.exports = {
 };
 
 function check(req, res) {
-  res.json( "Alive" );
+  res.json( "Still alive" );
 }
 
 function canvasFind(req, res) {

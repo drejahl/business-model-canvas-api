@@ -2,7 +2,7 @@ swagger: "2.0"
 info:
   version: "0.0.1"
   title: Business Model Canvas API
-host: localhost:80
+host: "bmcapi.endpoints.citric-lead-197512.cloud.goog"
 basePath: /v1
 #
 schemes:
