@@ -3,8 +3,6 @@
 const uuidv1 = require('uuid/v1');
 var mongoUtils = require('../utilities/mongoUtils')
 
-var config = require( './config.json' );
-
 var util = require('util');
 
 //var mongoUtils = require('../utilities/mongoUtils')
