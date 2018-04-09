@@ -45,7 +45,7 @@ function canvasFind(req, res) {
     var collection = db.collection('businessModelCanvas');
 
     // Find some documents
-    collection.find({},
+    collection.find({ $or: [ {owner: req.user.sub}, {private: false} ]},
         mongoUtils.fieldFilter(req.swagger.params.fields.value)).toArray(function(err, docs) {
         assert.equal(err, null);
 
@@ -120,8 +120,6 @@ function canvasGet(req, res) {
     // Find one document
     collection.findOne( query,
       mongoUtils.fieldFilter(req.swagger.params.fields.value), function(err, doc) {
-
-        console.log("Q", JSON.stringify(query))
       assert.equal(err, null);
 
       if ( doc != undefined && ( doc.owner === req.user.sub || doc.private === false )) {
