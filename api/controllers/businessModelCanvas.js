@@ -121,6 +121,7 @@ function canvasGet(req, res) {
     collection.findOne( query,
       mongoUtils.fieldFilter(req.swagger.params.fields.value), function(err, doc) {
 
+        console.log("Q", JSON.stringify(query))
       assert.equal(err, null);
 
       if ( doc != undefined && ( doc.owner === req.user.sub || doc.private === false )) {
