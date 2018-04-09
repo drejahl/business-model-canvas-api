@@ -16,7 +16,8 @@ const mongourl = process.env.MONGO_STRING;
 module.exports = {
   canvasFind,
   canvasGet,
-  canvasCreate
+  canvasCreate,
+  canvasReplace
 };
 
 function canvasFind(req, res) {
@@ -137,8 +138,6 @@ function canvasGet(req, res) {
 function canvasCreate(req, res) {
   var canvas = req.swagger.params.canvas.value;
 
-  console.log("CREATE: ", JSON.stringify(canvas));
-
   canvas.id = uuidv1();
   canvas.status = "Draft";
   canvas.owner = req.user.sub;
@@ -175,6 +174,15 @@ function canvasReplace(req, res) {
   var canvas = req.swagger.params.canvas.value;
   var id = req.swagger.params.id.value;
 
+  let baseUrl = req.url;
+
+  if (req.url.indexOf("?")>1) {
+    baseUrl = req.url.slice( 0, req.url.indexOf("?") );
+  }
+  var self = baseUrl + "/" + canvas.id;
+
+  var mongoDoc = Object.assign( {}, canvas );
+
   // Use connect method to connect to the server
   MongoClient.connect(mongourl, function(err, client) {
     assert.equal(null, err);
@@ -184,7 +192,7 @@ function canvasReplace(req, res) {
     // Get the documents collection
     var collection = db.collection('bmc');
     // Push reference to experiment doc
-    collection.update( {id: id}, canvas, function(err, result) {
+    collection.update( {id: id}, mongoDoc, function(err, result) {
       assert.equal(err, null)
       });
     client.close();
