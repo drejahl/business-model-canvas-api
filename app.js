@@ -38,7 +38,7 @@ swaggerTools.initializeMiddleware(swaggerConfig, function(middleware) {
 
   app.use(middleware.swaggerRouter(routerConfig));
 
-  app.listen(80, function() {
-    console.log("Started server on port 80.");
+  app.listen(process.env.SRV_PORT, function() {
+    console.log("Started server on port", process.env.SRV_PORT);
   });
 });

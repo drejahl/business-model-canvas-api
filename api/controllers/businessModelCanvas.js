@@ -15,13 +15,8 @@ const mongourl = process.env.MONGO_STRING;
 
 module.exports = {
   canvasFind,
-  canvasCreate,
-  check
+  canvasCreate
 };
-
-function check(req, res) {
-  res.json( "Still alive" );
-}
 
 function canvasFind(req, res) {
 
@@ -113,9 +108,11 @@ function canvasCreate(req, res) {
 
   console.log("CREATE: ", JSON.stringify(canvas));
 
-  if (!canvas.id) {
-    canvas.id = uuidv1();
-  }
+  canvas.id = uuidv1();
+  canvas.status = "Draft";
+  canvas.owner = req.user.sub;
+  canvas.created = Date.now();
+  canvas.modified = Date.now();
 
   let baseUrl = req.url;
 
@@ -124,17 +121,21 @@ function canvasCreate(req, res) {
   }
   var self = baseUrl + "/" + canvas.id;
 
+  var mongoDoc = Object.assign( {}, canvas );
+
   // Use connect method to connect to the server
-  MongoClient.connect(mongourl, function(err, db) {
+  MongoClient.connect(mongourl, function(err, client) {
     assert.equal(null, err);
 
+    const db = client.db("test");
+
     // Get the documents collection
-    var collection = db.collection('businessModelCanvas');
+    var collection = db.collection('bmc');
     // Insert some documents
-    collection.insert( canvas, function(err, result) {
+    collection.insert( mongoDoc, function(err, result) {
       assert.equal(err, null)
       });
-    db.close();
+    client.close();
     });
     res.json( generateHalDoc( canvas, self ));
 }
