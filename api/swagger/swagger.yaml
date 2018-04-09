@@ -98,6 +98,31 @@ paths:
           description: Error
           schema:
             $ref: "#/definitions/ErrorResponse"
+    put:
+      security:
+        - Bearer: []
+      tags:
+        - BusinessModelCanvas
+      operationId: canvasReplace
+      summary: canvasReplace
+      description: ''
+      deprecated: false
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ''
+          type: string
+        - name: canvas
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/BusinessModelCanvas'
+      responses:
+        '200':
+          description: BusinessModelCanvas
+          schema:
+            $ref: '#/definitions/BusinessModelCanvas'
   /swagger:
     x-swagger-pipe: swagger_raw
 

@@ -171,6 +171,27 @@ function canvasCreate(req, res) {
     res.json( generateHalDoc( canvas, self ));
 }
 
+function canvasReplace(req, res) {
+  var canvas = req.swagger.params.canvas.value;
+  var id = req.swagger.params.id.value;
+
+  // Use connect method to connect to the server
+  MongoClient.connect(mongourl, function(err, client) {
+    assert.equal(null, err);
+
+    const db = client.db("test");
+
+    // Get the documents collection
+    var collection = db.collection('bmc');
+    // Push reference to experiment doc
+    collection.update( {id: id}, canvas, function(err, result) {
+      assert.equal(err, null)
+      });
+    client.close();
+    });
+    res.json( generateHalDoc( canvas, self ));
+}
+
 function generateHalDoc( doc, url ) {
   // delete the mongodb _id attribute from the JSON document
   delete doc["_id"]
