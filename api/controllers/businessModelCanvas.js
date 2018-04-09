@@ -15,6 +15,7 @@ const mongourl = process.env.MONGO_STRING;
 
 module.exports = {
   canvasFind,
+  canvasGet,
   canvasCreate
 };
 
@@ -101,6 +102,37 @@ function canvasFind(req, res) {
         res.json( halresp );
         });
     })
+}
+
+function canvasGet(req, res) {
+
+  // Use connect method to connect to the server
+  MongoClient.connect(mongourl, function(err, client) {
+    assert.equal(null, err);
+
+    const db = client.db("test");
+
+    // Get the documents collection
+
+    var collection = db.collection('bmc');
+    const query = { id: req.swagger.params.id.value.toString() }
+
+    // Find one document
+    collection.findOne( query,
+      mongoUtils.fieldFilter(req.swagger.params.fields.value), function(err, doc) {
+
+      assert.equal(err, null);
+
+      if ( doc != undefined && ( doc.owner === req.user.sub || doc.private === false )) {
+        const halDoc = generateHalDoc( doc, req.url );
+
+        res.json( halDoc )
+      } else {
+        // Error handling missing [To-Do]
+        res.json( "{}")
+      }
+    });
+  });
 }
 
 function canvasCreate(req, res) {

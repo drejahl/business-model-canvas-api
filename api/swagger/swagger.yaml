@@ -67,6 +67,37 @@ paths:
           description: "Access Denied"
           schema:
             $ref: "#/definitions/ErrorResponse"
+  /experiment/{id}:
+    x-swagger-router-controller: businessModelCanvas
+    get:
+      security:
+        - Bearer: []
+      description: Returns one business model canvas
+      operationId: canvasGet
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ''
+          type: string
+        - name: fields
+          in: query
+          required: false
+          description: ''
+          type: string
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: "#/definitions/BusinessModelCanvas"
+        "403":
+          description: "Access Denied"
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
   /swagger:
     x-swagger-pipe: swagger_raw
 
