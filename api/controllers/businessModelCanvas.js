@@ -43,7 +43,7 @@ function canvasFind(req, res) {
 
     // Get the documents collection
 
-    var collection = db.collection('businessModelCanvas');
+    var collection = db.collection('bmc');
 
     // Find some documents
     collection.find({ $or: [ {owner: req.user.sub}, {private: false} ]},
@@ -143,6 +143,7 @@ function canvasCreate(req, res) {
   canvas.owner = req.user.sub;
   canvas.created = Date.now();
   canvas.modified = Date.now();
+  canvas.userName = req.user["https://experimenz.com/name"];
 
   let baseUrl = req.url;
 
