@@ -12,6 +12,7 @@ var assert = require('assert');
 
 // Mongo URL
 const mongourl = process.env.MONGO_STRING;
+const dbname = process.env.MONGO_DB_NAME;
 
 module.exports = {
   canvasFind,
@@ -23,11 +24,13 @@ module.exports = {
 function canvasFind(req, res) {
 
   // Use connect method to connect to the server
-  MongoClient.connect(mongourl, function(err, db) {
+  MongoClient.connect(mongourl, function(err, client) {
     if (err!=null) {
       res.status(500).send({ error: err });
       return;
     }
+
+    const db = client.db(dbname);
 
     var pageno = req.swagger.params.page.value ? parseInt(req.swagger.params.page.value) : 1;
 
@@ -57,7 +60,7 @@ function canvasFind(req, res) {
           return;
         }
 
-        db.close();
+        client.close();
         const totalsize = docs.length
 
         // slice page
@@ -116,11 +119,13 @@ function canvasFind(req, res) {
 function canvasGet(req, res) {
 
   // Use connect method to connect to the server
-  MongoClient.connect(mongourl, function(err, db) {
+  MongoClient.connect(mongourl, function(err, client) {
     if (err!=null) {
       res.status(500).send({ error: err });
       return;
     }
+
+    const db = client.db(dbname);
 
     // Get the documents collection
 
@@ -135,7 +140,7 @@ function canvasGet(req, res) {
           return;
         }
 
-        db.close();
+        client.close();
       if ( doc != undefined && ( doc.owner === req.user.sub || doc.private === false )) {
         const halDoc = generateHalDoc( doc, req.url );
 
@@ -168,11 +173,12 @@ function canvasCreate(req, res) {
   var mongoDoc = Object.assign( {}, canvas );
 
   // Use connect method to connect to the server
-  MongoClient.connect(mongourl, function(err, db) {
+  MongoClient.connect(mongourl, function(err, client) {
     if (err!=null) {
       res.status(500).send({ error: err });
       return;
     }
+    const db = client.db(dbname);
 
     // Get the documents collection
     var collection = db.collection('bmc');
@@ -183,7 +189,7 @@ function canvasCreate(req, res) {
         return;
       }
 
-      db.close();
+      client.close();
 
     });
   });
@@ -204,11 +210,12 @@ function canvasReplace(req, res) {
   var mongoDoc = Object.assign( {}, canvas );
 
   // Use connect method to connect to the server
-  MongoClient.connect(mongourl, function(err, db) {
+  MongoClient.connect(mongourl, function(err, client) {
     if (err!=null) {
       res.status(500).send({ error: err });
       return;
     }
+    const db = client.db(dbname);
 
     // Get the documents collection
     var collection = db.collection('bmc');
@@ -219,7 +226,7 @@ function canvasReplace(req, res) {
         return;
       }
 
-      db.close();
+      client.close();
     });
   });
   res.json( generateHalDoc( canvas, self ));
