@@ -54,19 +54,18 @@ function canvasFind(req, res) {
     var collection = db.collection('bmc');
 
     var query = {};
-    var subQuery = [ {owner: req.user.sub} ];
+    var subQuery = [];
 
+    if (own==="yes" || priv==="yes") {
+      subQuery.push({owner: req.user.sub});
+    }
     if (priv==="yes") {
       subQuery.push({private: true});
-    } else if (priv==="no") {
+    } else (priv==="no") {
       subQuery.push({private: false});
     }
 
-    if (own==="yes" || priv==="yes") {
-      query = { $and: subQuery };
-    } else {
-      query = { $or: subQuery };
-    }
+    query = { $and: subQuery };
 
     // Find some documents
     collection.find(query,
