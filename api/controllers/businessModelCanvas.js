@@ -33,6 +33,8 @@ function canvasFind(req, res) {
     const db = client.db(dbname);
 
     var pageno = req.swagger.params.page.value ? parseInt(req.swagger.params.page.value) : 1;
+    var priv = req.swagger.params.private.value;
+    var own = req.swagger.params.owning.value;
 
     // Fixed page size for now
 
@@ -51,8 +53,23 @@ function canvasFind(req, res) {
 
     var collection = db.collection('bmc');
 
+    var query = {};
+    var subQuery = [ {owner: req.user.sub} ];
+
+    if (priv===true) {
+      subQuery.push({private: true});
+    } else {
+      subQuery.push({private: false});
+    }
+
+    if (own===true) {
+      query = { $and: subQuery };
+    } else {
+      query = { $or: subQuery };
+    }
+
     // Find some documents
-    collection.find({ $or: [ {owner: req.user.sub}, {private: false} ]},
+    collection.find(query,
         mongoUtils.fieldFilter(req.swagger.params.fields.value)).toArray(function(err, docs) {
 
         if (err!=null) {
