@@ -56,7 +56,7 @@ function canvasFind(req, res) {
     var query = {};
     var subQuery = [];
 
-    if (!own && !priv) {
+    if ((!own || own==="no") && !priv) {
         query = { $or: [{owner: req.user.sub},{private: false}]};
     } else {
       if (own==="yes" || priv==="yes" ) {
@@ -64,10 +64,10 @@ function canvasFind(req, res) {
       }
       if (priv==="yes") {
         subQuery.push({private: true});
-      } else if (priv==="no" || !priv) {
+      } else if (priv==="no") {
         subQuery.push({private: false});
       }
-      if (own==="no" && priv==="true"){
+      if (own==="no" && priv==="yes"){
         res.status(403).send({ error: "Invalid filter" });
         return;
       }
