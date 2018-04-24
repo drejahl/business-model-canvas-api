@@ -62,7 +62,7 @@ function canvasFind(req, res) {
       subQuery.push({private: false});
     }
 
-    if (own===true) {
+    if (own===true || priv===true) {
       query = { $and: subQuery };
     } else {
       query = { $or: subQuery };
