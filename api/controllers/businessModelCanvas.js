@@ -64,7 +64,7 @@ function canvasFind(req, res) {
       }
       if (priv==="yes") {
         subQuery.push({private: true});
-      } else if (priv==="no") {
+      } else if (priv==="no" || !priv) {
         subQuery.push({private: false});
       }
       if (own==="no" && priv==="true"){
