@@ -50,12 +50,12 @@ paths:
           in: query
           required: false
           description: ''
-          type: boolean
+          type: string
         - name: owning
           in: query
           required: false
           description: ''
-          type: boolean
+          type: string
         - name: fields
           in: query
           required: false
