@@ -56,16 +56,23 @@ function canvasFind(req, res) {
     var query = {};
     var subQuery = [];
 
-    if (own==="yes" || priv==="yes") {
-      subQuery.push({owner: req.user.sub});
+    if (!own && !priv) {
+        query = { $or: [{owner: req.user.sub},{private: false}]};
+    } else {
+      if (own==="yes" || priv==="yes" ) {
+        subQuery.push({owner: req.user.sub});
+      }
+      if (priv==="yes") {
+        subQuery.push({private: true});
+      } else if (priv==="no") {
+        subQuery.push({private: false});
+      }
+      if (own==="no" && priv==="true"){
+        res.status(403).send({ error: "Invalid filter" });
+        return;
+      }
+      query = { $and: subQuery };
     }
-    if (priv==="yes") {
-      subQuery.push({private: true});
-    } else if (priv==="no") {
-      subQuery.push({private: false});
-    }
-
-    query = { $and: subQuery };
 
     // Find some documents
     collection.find(query,
