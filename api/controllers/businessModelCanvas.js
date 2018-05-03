@@ -251,6 +251,13 @@ function canvasDelete(req, res) {
     }
     const db = client.db(dbname);
 
+    const role = req.user["https://experimenz.com/role"] || "";
+
+    if (role!="admin" && canvas.private===false) {
+      res.status(403).send("Your role has no permission to delete a public Canvas!");
+      return;
+    }
+
     // Get the documents collection
     var collection = db.collection('bmc');
     // Push reference to experiment doc
@@ -278,6 +285,13 @@ function canvasReplace(req, res) {
   var self = baseUrl + "/" + canvas.id;
 
   var mongoDoc = Object.assign( {}, canvas );
+
+  const role = req.user["https://experimenz.com/role"] || "";
+
+  if (role!="admin" && canvas.private===false) {
+    res.status(403).send("Your role has no permission to update a public Canvas!");
+    return;
+  }
 
   // Use connect method to connect to the server
   MongoClient.connect(mongourl, function(err, client) {
