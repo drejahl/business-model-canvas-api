@@ -108,6 +108,28 @@ paths:
           description: Error
           schema:
             $ref: "#/definitions/ErrorResponse"
+    delete:
+      security:
+        - Bearer: []
+      description: Returns one busines model canvas
+      operationId: canvasDelete
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ''
+          type: string
+      responses:
+        "200":
+          description: Success
+        "403":
+          description: "Access Denied"
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
     put:
       security:
         - Bearer: []
@@ -202,6 +224,10 @@ definitions:
       description:
         type: string
       type:
+        type: array
+        items:
+          type: string
+      stakeholderType:
         type: array
         items:
           type: string

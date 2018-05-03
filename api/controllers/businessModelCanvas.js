@@ -18,6 +18,7 @@ module.exports = {
   canvasFind,
   canvasGet,
   canvasCreate,
+  canvasDelete,
   canvasReplace
 };
 
@@ -195,6 +196,13 @@ function canvasCreate(req, res) {
 
   var mongoDoc = Object.assign( {}, canvas );
 
+  const role = req.user["https://experimenz.com/role"] || "";
+
+  if (role!="admin" && canvas.private===false) {
+    res.status(403).send("Your role has no permission to create a public Canvas!");
+    return;
+  }
+
   // Use connect method to connect to the server
   MongoClient.connect(mongourl, function(err, client) {
     if (err!=null) {
@@ -205,18 +213,57 @@ function canvasCreate(req, res) {
 
     // Get the documents collection
     var collection = db.collection('bmc');
-    // Insert some documents
-    collection.insert( mongoDoc, function(err, result) {
+
+    collection.find({owner: req.user.sub}).toArray(function(err, docs) {
+      if (err!=null) {
+        res.status(500).send({ error: err });
+        return;
+      }
+
+      const quota = req.user["https://experimenz.com/sicQuota"] || 5;
+
+      if ( docs.length < quota ) {
+        // Insert some documents
+        collection.insert( mongoDoc, function(err, result) {
+          if (err!=null) {
+            res.status(500).send({ error: err });
+            return;
+          }
+          client.close();
+          res.json( generateHalDoc( canvas, self ));
+        });
+      } else {
+        client.close();
+        res.status(403).send("Maximum number of Business Model Canvases exceeded! Upgrade your subscription!");
+      }
+    });
+  });
+}
+
+function canvasDelete(req, res) {
+  var id = req.swagger.params.id.value;
+
+  // Use connect method to connect to the server
+  MongoClient.connect(mongourl, function(err, client) {
+    if (err!=null) {
+      res.status(500).send({ error: err });
+      return;
+    }
+    const db = client.db(dbname);
+
+    // Get the documents collection
+    var collection = db.collection('bmc');
+    // Push reference to experiment doc
+    collection.deleteOne( {id: id}, function(err, result) {
       if (err!=null) {
         res.status(500).send({ error: err });
         return;
       }
 
       client.close();
-
     });
   });
-  res.json( generateHalDoc( canvas, self ));
+  res.status(200).send();
 }
 
 function canvasReplace(req, res) {
