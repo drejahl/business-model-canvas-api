@@ -171,6 +171,8 @@ definitions:
         type: string
       owner:
         type: string
+      teamRef:
+        type: string
       userName:
         type: string
       created:
